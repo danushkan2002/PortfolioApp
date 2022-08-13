@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from rest_framework.response import Response
-from api.accounts.serializers import UserSerializerWithToken
+from api.accounts.serializers import UserSerializer, UserSerializerWithToken
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.decorators import api_view, permission_classes
@@ -35,4 +35,11 @@ def registerUser(request):
     
     )
     serializer = UserSerializerWithToken(user, many=False)
+    return Response(serializer.data)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def getProfile(request):
+    user = request.user
+    serializer = UserSerializer(user, many=False)
     return Response(serializer.data)

@@ -14,7 +14,6 @@ const App = () => {
   return (
     <Router>
       <Page>
-      <Navbar/>
         <Routes>
           <Route element={<PrivateRoute/>}>
             <Route path='/Profile' element={<HomeScreen/>}/>

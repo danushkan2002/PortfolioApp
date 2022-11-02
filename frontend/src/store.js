@@ -1,25 +1,25 @@
-import { legacy_createStore as createStore , combineReducers, applyMiddleware } from 'redux'
+import { combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
+import {configureStore}  from '@reduxjs/toolkit'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { userProfileReducer, userLoginReducer } from './reducers/userReducer'
 
-import { userLoginReducer, userProfileReducer } from './reducers/UserReducer'
 
 const reducer = combineReducers({
     userLogin : userLoginReducer,
     userProfile : userProfileReducer,
 })
 
-const middleware =[thunk]
-
 const userInfoFromStorage = localStorage.getItem('userInfo') ?
     JSON.parse(localStorage.getItem('userInfo')) : null
 
-
-
 const inisialState = {
-    userLogin : { userInfo : userInfoFromStorage },
+    userLogin : {userInfo : userInfoFromStorage}
 }
 
-const store = createStore(reducer,inisialState, composeWithDevTools(applyMiddleware(...middleware)))
+const middlware = [thunk]
+
+const store = configureStore({reducer}, inisialState, 
+    composeWithDevTools(applyMiddleware(...middlware)))
 
 export default store

@@ -4,22 +4,28 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 # Create your models here.
 
 class UserAccountManager(BaseUserManager):
+    def create_user(self, username, email, password=None):
+        if not email:
+            raise ValueError('User must have email')
 
-    def create_user(self, username, password=None):
         if not username:
             raise ValueError('User must have an username')
         
         user=self.model(
             username= username,
+            email = self.normalize_email(email),
+            
         )
+
         user.set_password(password)
         user.save()
         return user
 
 
-    def create_superuser(self, username, password ):
+    def create_superuser(self,  username, email, password ):
         user = self.create_user(
-            username = username,
+            username=username,
+            email = self.normalize_email(email),
             password = password,
         )
 
@@ -32,8 +38,7 @@ class UserAccountManager(BaseUserManager):
 
 class UserAccount(AbstractBaseUser):
     username = models.CharField(max_length=100, unique=True)
-    mobile_number = models.CharField(max_length=10, blank=True, null=True)
-    profile = models.ImageField(upload_to='profile/', null=True, blank=True)
+    email = models.EmailField(max_length=50, blank=True, null=True, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -44,10 +49,10 @@ class UserAccount(AbstractBaseUser):
 
     objects         =   UserAccountManager()
 
-    USERNAME_FIELD  =   'username'
-    # REQUIRED_FIELDS = ['student_id', 'school_name', 'birth_year', 'phone_number']
+    USERNAME_FIELD  =   'email'
 
-    
+    REQUIRED_FIELDS =   ['username']
+        
     def __str__(self):
         return self.username
 
@@ -56,3 +61,4 @@ class UserAccount(AbstractBaseUser):
 
     def has_module_perms(self, add_label):
         return True
+

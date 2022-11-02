@@ -1,7 +1,7 @@
+import React,{ useEffect } from 'react'
 import {Navigate, Outlet } from 'react-router-dom'
-import React, { useState , useEffect} from 'react'
-import {useSelector, useDispatch} from 'react-redux'
-import { getProfile } from '../actions/UserActions'
+import { useDispatch, useSelector } from 'react-redux'
+import { getProfileDetails } from '../actions/userAction'
 
 const UnPrivateRoute = () => {
     const userProfile = useSelector(state => state.userProfile)
@@ -13,15 +13,11 @@ const UnPrivateRoute = () => {
     const dispatch = useDispatch()
 
     useEffect(() => {
-        if (userInfo) {
-            dispatch(getProfile())
-            console.log('ji')
-        } else {
-            dispatch(getProfile())
-        }
-    }, [dispatch, userInfo]);
-  return (
-    !user ? <Outlet/> : <Navigate to={'/'}/>
+        dispatch(getProfileDetails())
+    },[dispatch])
+
+  return ( !user || !userInfo ? <Outlet/> : <Navigate to='/'/>
+    
   )
 }
 

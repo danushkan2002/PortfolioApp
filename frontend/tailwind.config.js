@@ -4,7 +4,17 @@ module.exports = {
     "./src/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        '60': '#181A27',
+        '30': '#282A41',
+        '10': '#FF4B57',
+        'hover': '#FE3845',
+      },
+    },
+    fontFamily: {
+      'RobotoFlex': ['Roboto Flex', 'sans-serif'],
+    },
   },
   plugins: [],
 }

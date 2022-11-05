@@ -1,19 +1,46 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import { useInView } from 'react-intersection-observer';
-import { useLocation } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { useLocation} from 'react-router-dom'
 import {AiFillGithub, AiOutlineAppstoreAdd, AiOutlineGlobal} from 'react-icons/ai'
 import {HiDatabase} from 'react-icons/hi'
 import heroBG from '../Assets/heroBG.png'
+import { createMessage, messageClear } from '../actions/inboxAction'
+import success from '../Assets/success.png'
+import errorIMG from '../Assets/error.png'
+import { logout } from '../actions/userAction';
+
 
 const HomeScreen = () => {
   const {pathName} = useLocation()
   
+  const [email, setEmail] = useState('')
+  const [textArea, setTextArea] = useState('')
+
+  const messageCreateReducer = useSelector(state => state.messageCreateReducer)
+  const { message, messageLoading, messageError, messageSuccess } = messageCreateReducer
+
+  const dispatch = useDispatch()
+
   const { ref:heroRef, inView:isHeroVisible } = useInView({triggerOnce:true});
   const { ref:serviceRef, inView:isServiceVisible } = useInView({triggerOnce:true});
   const { ref:contactRef, inView:isContactVisible } = useInView({triggerOnce:true});
+
   useEffect(() => {
     window.scroll(0,0);
   }, [pathName]);
+
+  const submitHandler = (e) => {
+    e.preventDefault()
+    dispatch(createMessage(email, textArea))
+  }
+
+  const messageClearHandler = () => {
+    dispatch(messageClear())
+    setEmail('')
+    setTextArea('')
+  }
+
   return (
     <div className='w-max-[1024px] -mt-[100px] md:w-max-[1024px] '>
       <section ref={heroRef} className='bg-60 items-center bg-no-repeat bg-contain bg-right-top flex px-[25px] md:px-[100px] mt-[100px] pb-[50px]'
@@ -161,34 +188,60 @@ const HomeScreen = () => {
       </section>
       <section className='bg-60 py-[75px] md:py-[100px] px-[25px] xl:px-[100px]'>
         <div className='flex  justify-center'>
-          <form  ref={contactRef} className='flex flex-col w-full md:w-[550px]'>
-            <p className={
-              isContactVisible?
-              'text-5xl md:text-6xl font-RobotoFlex font-medium text-10 duration-1000':
-              'text-5xl md:text-6xl font-RobotoFlex font-medium text-10 mt-[100px] opacity-0'
-            }>Connect me</p>
-            <div className={
-              isContactVisible?
-              'w-[100px] h-[5px] bg-10 mt-[10px] duration-700':
-              'w-[100px] h-[5px] bg-10 mt-[10px] scale-x-50'
-            } ></div>
-            <div className='mt-[25px]'>
-              <input className={
+          <form onSubmit={submitHandler}  ref={contactRef} className='flex flex-col w-full md:w-[550px] relative'>
+            <div className=''>
+              <p className={
                 isContactVisible?
-                'h-[50px] md:h-[75px] w-full md:w-[550px] bg-30 px-[25px] font-RobotoFlex outline-none duration-1000':
-                'h-[50px] md:h-[75px] w-full md:w-[550px] bg-30 px-[25px] font-RobotoFlex outline-none opacity-0'
-              } placeholder='Email' type={'email'}></input>
-            </div>
-            <div className='mt-[25px]'>
-              <input className={
+                'text-5xl md:text-6xl font-RobotoFlex font-medium text-10 duration-1000':
+                'text-5xl md:text-6xl font-RobotoFlex font-medium text-10 mt-[100px] opacity-0'
+              }>Connect me</p>
+              <div className={
                 isContactVisible?
-                'h-[50px] md:h-[75px] w-full md:w-[550px] bg-30 px-[25px] font-RobotoFlex outline-none duration-1000':
-                'h-[50px] md:h-[75px] w-full md:w-[550px] bg-30 px-[25px] font-RobotoFlex outline-none opacity-0'
-              } placeholder='Password' type={'text'}></input>
+                'w-[100px] h-[5px] bg-10 mt-[10px] duration-700':
+                'w-[100px] h-[5px] bg-10 mt-[10px] scale-x-50'
+              } ></div>
+              <div className='mt-[25px]'>
+                <input className={
+                  isContactVisible?
+                  'h-[50px] md:h-[75px] w-full md:w-[550px] bg-30 px-[25px] text-white font-RobotoFlex outline-none duration-1000':
+                  'h-[50px] md:h-[75px] w-full md:w-[550px] bg-30 px-[25px] text-white font-RobotoFlex outline-none opacity-0'
+                } placeholder='Email' value={email}  onChange={(e) => setEmail(e.target.value)} type={'email'}></input>
+              </div>
+              <div className='mt-[25px]'>
+                <textarea className={
+                  isContactVisible?
+                  'h-[100px] md:h-[150px] w-full md:w-[550px] bg-30 pt-[25px] px-[25px] text-white font-RobotoFlex outline-none duration-1000':
+                  'h-[100px] md:h-[150px] w-full md:w-[550px] bg-30 pt-[25px] px-[25px] text-white font-RobotoFlex outline-none opacity-0'
+                } placeholder='Message' value={textArea}  onChange={(e) => setTextArea(e.target.value) } type={''}></textarea>
+              </div>
+              <button type={'submit'} className='w-[150px] md:w-[225px] h-[50px] md:h-[60px] bg-10 ml-auto font-RobotoFlex mt-[25px] font-semibold text-xs md:text-base hover:bg-opacity-90'>
+                <p>Stay Connected</p>
+              </button>
             </div>
-            <button className='w-[150px] md:w-[225px] h-[50px] md:h-[60px] bg-10 ml-auto font-RobotoFlex mt-[25px] font-semibold text-xs md:text-base'>
-              <p>Stay Connected</p>
-            </button>
+            {
+              messageLoading ?              
+              <div className='w-full h-full bg-60 absolute opacity-50 flex justify-center items-center'>
+                <span class="flex h-[35px] w-[35px] relative">
+                  <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-10 opacity-75"></span>
+                  <span class=" inline-flex rounded-full h-[35px] w-[35px] border-[5px] border-10 opacity-75"></span>
+                </span>
+              </div> :
+              messageError ?
+              <div className='w-full h-full bg-60 opacity-75 absolute flex flex-col justify-center items-center'>
+                <img src={success} alt='' className='w-[50px] h-[50px]' />
+                <p className='text-white font-RobotoFlex text-lg font-semibold uppercase'>Error</p>
+                <p className='font-RobotoFlex text-white opacity-50 w-[200px] text-center text-sm' >{messageError}</p>
+                <button onClick={messageClearHandler} className='font-RobotoFlex w-[225px] h-[60px] border-[2.5px] border-[#3BB54A] text-[#3BB54A] mt-[25px] text-xs hover:bg-[#3BB54A] hover:text-white duration-200' >Done</button> 
+              </div>:
+              messageSuccess ?
+              <div className='w-full h-full bg-60 absolute flex flex-col justify-center items-center'>
+                <img src={success} alt='' className='w-[50px] h-[50px]' />
+                <p className='text-white font-RobotoFlex text-lg font-semibold uppercase'>success</p>
+                <p className='font-RobotoFlex text-white opacity-50 w-[200px] text-center text-sm' >Successfully posted you message</p>
+                <button onClick={messageClearHandler} className='font-RobotoFlex w-[225px] h-[60px] border-[2.5px] border-[#3BB54A] text-[#3BB54A] mt-[25px] text-xs hover:bg-[#3BB54A] hover:text-white duration-200' >Done</button> 
+              </div> :
+              ''
+            }
           </form>
           <div className='ml-auto my-auto hidden lg:block'>
             <div className='flex flex-col items-center justify-center'>
@@ -211,3 +264,5 @@ const HomeScreen = () => {
 }
 
 export default HomeScreen
+
+

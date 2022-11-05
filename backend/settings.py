@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'api.accounts',
     'rest_framework',
     'rest_framework_simplejwt',
+    'api.inbox',
 ]
 
 REST_FRAMEWORK = {

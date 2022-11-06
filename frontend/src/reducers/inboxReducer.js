@@ -24,6 +24,11 @@ import {
     POST_MESSAGE_FAIL,
     POST_MESSAGE_RESET,
 
+    DELETE_MESSAGE_REQUEST,
+    DELETE_MESSAGE_SUCCESS,
+    DELETE_MESSAGE_FAIL,
+    DELETE_MESSAGE_RESET,
+
 } from '../constants/inboxConstant'
 
 export const todayMessagesReducer = (state = { todayMessages:[] }, action) => {
@@ -117,6 +122,22 @@ export const messageCreateReducer = (state = {}, action) => {
             return {}
     
             
+        default:
+            return state
+    }
+}
+
+export const messageDeleteReducer = (state = {}, action) => {
+    switch(action.type) {
+        case DELETE_MESSAGE_REQUEST:
+            return {messageDeleteLoading: true}
+
+        case DELETE_MESSAGE_SUCCESS:
+            return {messageDeleteLoading: false, messageDelete: action.payload}
+
+        case DELETE_MESSAGE_FAIL:
+            return {messageDeleteLoading: false, messageDeleteError: action.payload}
+
         default:
             return state
     }

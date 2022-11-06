@@ -3,7 +3,7 @@ import thunk from 'redux-thunk'
 import {configureStore}  from '@reduxjs/toolkit'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { userProfileReducer, userLoginReducer } from './reducers/userReducer'
-import { allMessagesReducer, messageCreateReducer, monthMessagesReducer, todayMessagesReducer, yesterdayMessagesReducer } from './reducers/inboxReducer'
+import { allMessagesReducer, messageCreateReducer, messageDeleteReducer, monthMessagesReducer, todayMessagesReducer, yesterdayMessagesReducer } from './reducers/inboxReducer'
 
 
 const reducer = combineReducers({
@@ -15,6 +15,7 @@ const reducer = combineReducers({
     monthMessagesReducer : monthMessagesReducer,
     allMessagesReducer : allMessagesReducer,
     messageCreateReducer: messageCreateReducer,
+    messageDeleteReducer: messageDeleteReducer,
 })
 
 const userInfoFromStorage = localStorage.getItem('userInfo') ?

@@ -4,8 +4,9 @@ import {AiOutlineCopy} from 'react-icons/ai'
 import {MdDeleteOutline} from 'react-icons/md'
 import { useInView } from 'react-intersection-observer';
 import { useLocation } from 'react-router-dom'
-import {getAllMessages, getTodayMessages, getYesterdayMessages, getMonthMessages} from '../actions/inboxAction'
+import {getAllMessages, getTodayMessages, getYesterdayMessages, getMonthMessages, deleteMessage} from '../actions/inboxAction'
 import {IoCheckmarkDoneCircleOutline} from 'react-icons/io5'
+import { messageDeleteReducer } from '../reducers/inboxReducer';
 
 const MessageScreen = () => {
   const {pathName} = useLocation()
@@ -69,6 +70,9 @@ const MessageScreen = () => {
     setMonth(true)
   }
 
+  const messageDeleteHandler = (id) => {
+    dispatch(deleteMessage(id))
+  }
   
   return (
     <div className='mt-[100px] lg:mt-[125px] xl:px-[100px] flex flex-col lg:flex-row '>
@@ -192,7 +196,7 @@ const MessageScreen = () => {
                                                     <button onClick={() => {navigator.clipboard.writeText(message.email)}} className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:opacity-0 duration-100 bg-30 focus:delay-100'><AiOutlineCopy className='mx-auto text-3xl text-white '/></button>
                                                 </div>
                                                 <div className='h-[50px] w-[2.5px] bg-white opacity-25'></div>
-                                                <button className='w-1/2 text-center hover:scale-105'>
+                                                <button onClick={() => {messageDeleteHandler(message.id); todayHandler();}} className='w-1/2 text-center hover:scale-105'>
                                                     <MdDeleteOutline className='mx-auto text-3xl text-white'/>
                                                 </button>
                                             </div>
@@ -266,7 +270,7 @@ const MessageScreen = () => {
                                                         <button onClick={() => {navigator.clipboard.writeText(message.email)}} className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:opacity-0 duration-100 bg-30 focus:delay-100'><AiOutlineCopy className='mx-auto text-3xl text-white '/></button>
                                                     </div>
                                                     <div className='h-[50px] w-[2.5px] bg-white opacity-25'></div>
-                                                    <button className='w-1/2 text-center hover:scale-105'>
+                                                    <button onClick={() => {messageDeleteHandler(message.id); yesterdayHandler();}} className='w-1/2 text-center hover:scale-105'>
                                                         <MdDeleteOutline className='mx-auto text-3xl text-white'/>
                                                     </button>
                                                 </div>
@@ -340,7 +344,7 @@ const MessageScreen = () => {
                                                     <button onClick={() => {navigator.clipboard.writeText(message.email)}} className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:opacity-0 duration-100 bg-30 focus:delay-100'><AiOutlineCopy className='mx-auto text-3xl text-white '/></button>
                                                 </div>
                                                 <div className='h-[50px] w-[2.5px] bg-white opacity-25'></div>
-                                                <button className='w-1/2 text-center hover:scale-105'>
+                                                <button onClick={() => {messageDeleteHandler(message.id); monthHandler();}} className='w-1/2 text-center hover:scale-105'>
                                                     <MdDeleteOutline className='mx-auto text-3xl text-white'/>
                                                 </button>
                                             </div>
@@ -413,7 +417,7 @@ const MessageScreen = () => {
                                                     <button onClick={() => {navigator.clipboard.writeText(message.email)}} className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:opacity-0 duration-100 bg-30 focus:delay-100'><AiOutlineCopy className='mx-auto text-3xl text-white '/></button>
                                                 </div>
                                                 <div className='h-[50px] w-[2.5px] bg-white opacity-25'></div>
-                                                <button className='w-1/2 text-center hover:scale-105'>
+                                                <button onClick={() => {messageDeleteHandler(message.id); allHandler();}} className='w-1/2 text-center hover:scale-105'>
                                                     <MdDeleteOutline className='mx-auto text-3xl text-white'/>
                                                 </button>
                                             </div>

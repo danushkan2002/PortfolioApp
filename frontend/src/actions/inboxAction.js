@@ -24,6 +24,11 @@ import {
     POST_MESSAGE_FAIL,
     POST_MESSAGE_RESET,
 
+    DELETE_MESSAGE_REQUEST,
+    DELETE_MESSAGE_SUCCESS,
+    DELETE_MESSAGE_FAIL,
+    DELETE_MESSAGE_RESET,
+
 } from '../constants/inboxConstant'
 import axios from 'axios'
 
@@ -190,6 +195,42 @@ export const createMessage = (email, message) => async(dispatch) => {
         const {data} = await axios.post(
             '/api/inbox/create/',
             {'email': email, 'message':message},
+            config
+        )
+
+        dispatch({
+            type : POST_MESSAGE_SUCCESS,
+            payload : data
+        })
+
+    } catch(error) {
+        dispatch({
+            type : POST_MESSAGE_FAIL,
+            payload: error.response && error.response.data.detail
+                ? error.response.data.detail
+                : error.message,
+        })
+    }
+}
+
+export const deleteMessage = (id) => async(dispatch, getState) => {
+    try{
+        dispatch({
+            type : POST_MESSAGE_REQUEST
+        })
+
+        const {
+            userLogin : {userInfo},
+        } = getState()
+
+        const config = {
+            headers : {
+                'Content-type':'application/json',
+                Authorization : `Bearer ${userInfo.token}`
+            }
+        }
+        const {data} = await axios.delete(
+            `/api/inbox/delete/${id}`,
             config
         )
 

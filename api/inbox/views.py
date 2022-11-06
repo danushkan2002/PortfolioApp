@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.response import Response
 from .models import Inbox
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .serializers import InboxSerializer
 # Create your views here.
 from datetime import date
@@ -48,3 +49,9 @@ def getMonthMessages(request):
 #     result = Inbox.objects.get(today=pk)
 #     serializer = InboxSerializer(result, many=True)
 #     return Response(serializer.data)
+
+@api_view(['DELETE'])
+def deleteMessage(request, pk):
+    message = Inbox.objects.get(id=pk)
+    message.delete()
+    return Response('Message Deleted')

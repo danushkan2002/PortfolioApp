@@ -52,16 +52,16 @@ const HomeScreen = () => {
               isHeroVisible ?
               'font-RobotoFlex text-5xl md:text-6xl font-medium text-white duration-1000':
               'font-RobotoFlex text-5xl md:text-6xl font-medium text-white opacity-0 mt-[50px] absolute'
-            }>Hello, I’m a freelancer</p>
+            }>Hello world,</p>
             <p className={
               isHeroVisible?
-              'font-RobotoFlex text-base md:text-lg text-[#383A4F] md:w-[350px] mt-[10px] duration-1000 ':
+              'font-RobotoFlex text-base md:text-lg text-[#383A4F] md:w-[350px] mt-[5px] duration-1000 ':
               'font-RobotoFlex text-base md:text-lg opacity-0 md:w-[350px] mt-[50px] relative'
-            }>Creating web application designs and bring them to life using code & develop mobile deigns</p>
+            }>We creating web application designs and bring them to life using code & develop mobile deigns</p>
             <button className={
               isHeroVisible?
-              'w-[225px] h-[60px] bg-10 hover:bg-hover text-white font-RobotoFlex mt-[10px] duration-75':
-              'w-[225px] h-[60px] bg-white hover:bg-hover text-white font-RobotoFlex mt-[10px] duration-75 relative'
+              'w-[225px] h-[60px] bg-10 hover:bg-hover text-white font-RobotoFlex mt-[35px] duration-75':
+              'w-[225px] h-[60px] bg-white hover:bg-hover text-white font-RobotoFlex mt-[35px] duration-75 relative'
             }>
               <p>Creator journey</p>
             </button>
@@ -115,7 +115,7 @@ const HomeScreen = () => {
                   isServiceVisible ?
                   'font-RobotoFlex mt-[5px] md:mt-[10px] text-[#9395A0] text-xs md:text-base duration-1000':
                   'font-RobotoFlex mt-[5px] md:mt-[10px] text-[#9395A0] text-xs md:text-base opacity-0'
-                }>I can handle everything from small to very large projects with speed and efficiency</p>
+                }>We can handle everything from small to very large projects with speed and efficiency</p>
               </div>
               <div className='md:w-[250px] h-[150px] md:h-[250px] bg-30 rounded-[5px] hover:scale-105 text-10 hover:text-hover duration-100 px-[25px] py-[25px]'>
                 <AiOutlineAppstoreAdd className={
@@ -132,7 +132,7 @@ const HomeScreen = () => {
                   isServiceVisible ?
                   'font-RobotoFlex mt-[5px] md:mt-[10px] text-[#9395A0] text-xs md:text-base duration-1000':
                   'font-RobotoFlex mt-[5px] md:mt-[10px] text-[#9395A0] text-xs md:text-base opacity-0'
-                }>I can create software applications that run on a mobile device</p>
+                }>We can create software applications that run on a mobile device</p>
               </div>
               <div className='md:w-[250px] h-[150px] md:h-[250px] bg-30 rounded-[5px] hover:scale-105 text-10 hover:text-hover duration-100 px-[25px] py-[25px]'>
                 <HiDatabase className={

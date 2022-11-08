@@ -18,11 +18,12 @@ import { logout } from '../actions/userAction';
 const LoginScreen = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [path, setPath] = useState(null)
   
   const userLogin = useSelector(state => state.userLogin)
   const { userInfo, loading, error } = userLogin
 
-  const {pathName} = useLocation()
+  const pathName = useLocation()
   const dispatch = useDispatch()
   const history = useNavigate()
 
@@ -40,7 +41,7 @@ const LoginScreen = () => {
   }, [pathName, userInfo]);
   
   const refreshPage = ()=>{
-    window.location.reload();  
+    console.log(path)  
   }
 
   const logoutHandler = () => {
@@ -53,20 +54,23 @@ const LoginScreen = () => {
   }
 
   return (
-    <div className='h-screen pt-[100px] w-full flex items-center justify-center min-h-[600px] '>
+    <div className='h-screen pt-[100px] w-full flex items-center justify-center min-h-[650px] '>
       <div ref={loginRef} className='relative w-full md:w-auto h-full md:h-auto'>
         <div className='w-full md:w-[600px] h-full md:h-auto flex items-center realtive'>
           <form onSubmit={submitHandler} className='w-full md:w-[400px] p-[25px] flex flex-col z-40 backdrop-blur-2xl'>
-              <p className={
-                isLoginVisible?
-                'font-RobotoFlex text-5xl md:text-6xl font-semibold text-10 duration-500':
-                'font-RobotoFlex text-5xl md:text-6xl font-semibold text-10 mt-[50px]'
-              }>Sign in</p> 
+              <div className='flex items-end'>
+                <p className={
+                  isLoginVisible?
+                  'font-RobotoFlex text-5xl md:text-6xl font-semibold text-10 duration-500':
+                  'font-RobotoFlex text-5xl md:text-6xl font-semibold text-10 mt-[50px]'
+                }>Sign in</p>
+                <Link to={'/Register'} className='ml-auto font-RobotoFlex text-white hover:text-10 pb-[3px]'>Sign up</Link>
+              </div> 
               <div className=''>
-                  <input value={email} onChange={(e) => setEmail(e.target.value)} className='mt-[25px] h-[50px] w-full bg-30 font-RobotoFlex outline-none text-white px-[25px] font-medium' type={'email'} placeholder='Email'></input>
+                  <input value={email} onChange={(e) => setEmail(e.target.value)} className='mt-[25px] h-[50px] w-full border-[1px] rounded-[2.5px] focus:border-opacity-50 duration-200 focus:border-[1.25px] bg-transparent border-white border-opacity-25 font-RobotoFlex outline-none text-white px-[25px]' type={'email'} placeholder='Email'></input>
               </div>     
               <div className=''>
-                  <input value={password} onChange={(e) => setPassword(e.target.value) } className='mt-[5px] h-[50px] w-full bg-30 font-RobotoFlex outline-none text-white px-[25px] font-medium' type={'password'} placeholder='Password'></input>
+                  <input value={password} onChange={(e) => setPassword(e.target.value) } className='mt-[5px] h-[50px] w-full border-[1px] rounded-[2.5px] focus:border-opacity-50 duration-200 focus:border-[1.25px] bg-transparent border-white border-opacity-25 font-RobotoFlex outline-none text-white px-[25px]' type={'password'} placeholder='Password'></input>
               </div>     
               <button type={'submit'} className='w-1/2 h-[50px] bg-10 text-white font-RobotoFlex ml-auto mt-[25px]'>Login</button>  
           </form>

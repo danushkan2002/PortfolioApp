@@ -15,6 +15,7 @@ const MessageScreen = () => {
   const [today, setToday] = useState(false)
   const [yesterday, setYesterday] = useState(false)
   const [month, setMonth] = useState(false)
+  const [loading, setLoading] = useState(false)
   
 
   const allMessagesReducer = useSelector(state => state.allMessagesReducer)
@@ -71,9 +72,20 @@ const MessageScreen = () => {
   }
 
   const messageDeleteHandler = (id) => {
-    dispatch(deleteMessage(id))
+    setLoading(true)
+    dispatch(deleteMessage(id)).then(() => {
+        dispatch(getAllMessages())
+        dispatch(getTodayMessages())
+        dispatch(getYesterdayMessages())
+        dispatch(getMonthMessages())
+        setLoading(false)
+    }
+    )     
   }
   
+
+
+
   return (
     <div className='mt-[100px] lg:mt-[125px] xl:px-[100px] flex flex-col lg:flex-row '>
        <div ref={messageRef} className='lg:w-1/4 lg:h-screen border-t-2 lg:border-none py-[25px] lg:px-[25px] grid grid-flow-col lg:block overflow-x-scroll lg:overflow-x-hidden pl-[25px] lg:bg-30 border-opacity-5 border-white'>
@@ -126,8 +138,8 @@ const MessageScreen = () => {
        <div className='lg:w-3/4 px-[25px] lg:px-0 lg:pl-[50px] flex flex-col mt-[25px] lg:mt-0' >
             <p className={
                 isMessageVisible?
-                'font-RobotoFlex text-10 font-bold text-xl border-b-[2px] border-10 w-[200px] duration-500':
-                'font-RobotoFlex text-10 font-bold text-xl border-b-[2px] border-10 w-[100px]'
+                'font-RobotoFlex text-10 font-bold text-xl duration-500':
+                'font-RobotoFlex text-10 font-bold text-xl'
             }>
                 Mail
             </p>
@@ -135,7 +147,7 @@ const MessageScreen = () => {
             {
                 today ?
                     (
-                        todayMessagesLoading?
+                        todayMessagesLoading || loading ?
                         <div className='flex flex-col '>
                                     <button className={
                                         isMessageVisible?
@@ -196,7 +208,7 @@ const MessageScreen = () => {
                                                     <button onClick={() => {navigator.clipboard.writeText(message.email)}} className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:opacity-0 duration-100 bg-30 focus:delay-100'><AiOutlineCopy className='mx-auto text-3xl text-white '/></button>
                                                 </div>
                                                 <div className='h-[50px] w-[2.5px] bg-white opacity-25'></div>
-                                                <button onClick={() => {messageDeleteHandler(message.id); todayHandler();}} className='w-1/2 text-center hover:scale-105'>
+                                                <button onClick={() => messageDeleteHandler(message.id)} className='w-1/2 text-center hover:scale-105'>
                                                     <MdDeleteOutline className='mx-auto text-3xl text-white'/>
                                                 </button>
                                             </div>
@@ -209,7 +221,7 @@ const MessageScreen = () => {
                 :
                 yesterday ?
                     (
-                        yesterdayMessagesLoading ?
+                        yesterdayMessagesLoading || loading  ?
                             <div className='flex flex-col '>
                                         <button className={
                                             isMessageVisible?
@@ -270,7 +282,7 @@ const MessageScreen = () => {
                                                         <button onClick={() => {navigator.clipboard.writeText(message.email)}} className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:opacity-0 duration-100 bg-30 focus:delay-100'><AiOutlineCopy className='mx-auto text-3xl text-white '/></button>
                                                     </div>
                                                     <div className='h-[50px] w-[2.5px] bg-white opacity-25'></div>
-                                                    <button onClick={() => {messageDeleteHandler(message.id); yesterdayHandler();}} className='w-1/2 text-center hover:scale-105'>
+                                                    <button onClick={() => messageDeleteHandler(message.id)} className='w-1/2 text-center hover:scale-105'>
                                                         <MdDeleteOutline className='mx-auto text-3xl text-white'/>
                                                     </button>
                                                 </div>
@@ -283,7 +295,7 @@ const MessageScreen = () => {
                 :
                 month ?
                     (
-                        monthMessagesLoading ?
+                        monthMessagesLoading || loading  ?
                         <div className='flex flex-col '>
                                     <button className={
                                         isMessageVisible?
@@ -344,7 +356,7 @@ const MessageScreen = () => {
                                                     <button onClick={() => {navigator.clipboard.writeText(message.email)}} className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:opacity-0 duration-100 bg-30 focus:delay-100'><AiOutlineCopy className='mx-auto text-3xl text-white '/></button>
                                                 </div>
                                                 <div className='h-[50px] w-[2.5px] bg-white opacity-25'></div>
-                                                <button onClick={() => {messageDeleteHandler(message.id); monthHandler();}} className='w-1/2 text-center hover:scale-105'>
+                                                <button onClick={() => messageDeleteHandler(message.id)} className='w-1/2 text-center hover:scale-105'>
                                                     <MdDeleteOutline className='mx-auto text-3xl text-white'/>
                                                 </button>
                                             </div>
@@ -356,7 +368,7 @@ const MessageScreen = () => {
                     )
                 :
                     (
-                        allMessagesLoading?
+                        allMessagesLoading || loading ?
                         <div className='flex flex-col '>
                                     <button className={
                                         isMessageVisible?
@@ -417,7 +429,7 @@ const MessageScreen = () => {
                                                     <button onClick={() => {navigator.clipboard.writeText(message.email)}} className='absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 focus:opacity-0 duration-100 bg-30 focus:delay-100'><AiOutlineCopy className='mx-auto text-3xl text-white '/></button>
                                                 </div>
                                                 <div className='h-[50px] w-[2.5px] bg-white opacity-25'></div>
-                                                <button onClick={() => {messageDeleteHandler(message.id); allHandler();}} className='w-1/2 text-center hover:scale-105'>
+                                                <button onClick={() => messageDeleteHandler(message.id)} className='w-1/2 text-center hover:scale-105'>
                                                     <MdDeleteOutline className='mx-auto text-3xl text-white'/>
                                                 </button>
                                             </div>

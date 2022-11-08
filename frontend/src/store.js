@@ -2,14 +2,15 @@ import { combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import {configureStore}  from '@reduxjs/toolkit'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { userProfileReducer, userLoginReducer } from './reducers/userReducer'
+import { userProfileReducer, userLoginReducer, userRegisterReducer } from './reducers/userReducer'
 import { allMessagesReducer, messageCreateReducer, messageDeleteReducer, monthMessagesReducer, todayMessagesReducer, yesterdayMessagesReducer } from './reducers/inboxReducer'
 
 
 const reducer = combineReducers({
     userLogin : userLoginReducer,
     userProfile : userProfileReducer,
-    
+    userRegisterReducer: userRegisterReducer,
+
     todayMessagesReducer : todayMessagesReducer,
     yesterdayMessagesReducer : yesterdayMessagesReducer,
     monthMessagesReducer : monthMessagesReducer,

@@ -4,9 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getProfileDetails } from '../actions/userAction'
 
 const PrivateRoute = () => {
-    const userProfile = useSelector(state => state.userProfile)
-    const { user } = userProfile
-
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
@@ -15,7 +12,8 @@ const PrivateRoute = () => {
     useEffect(() => {
         dispatch(getProfileDetails())
     },[dispatch])
-  return ( user || userInfo ? <Outlet/> : <Navigate to='/login'/>
+    
+  return ( userInfo ? <Outlet/> : <Navigate to='/login'/>
     
   )
 }

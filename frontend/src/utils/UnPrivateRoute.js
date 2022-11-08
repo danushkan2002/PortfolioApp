@@ -4,9 +4,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getProfileDetails } from '../actions/userAction'
 
 const UnPrivateRoute = () => {
-    const userProfile = useSelector(state => state.userProfile)
-    const { user } = userProfile
-
     const userLogin = useSelector(state => state.userLogin)
     const { userInfo } = userLogin
 
@@ -16,7 +13,7 @@ const UnPrivateRoute = () => {
         dispatch(getProfileDetails())
     },[dispatch])
 
-  return ( !user || !userInfo ? <Outlet/> : <Navigate to='/'/>
+  return (!userInfo ? <Outlet/> : <Navigate to='/'/>
     
   )
 }

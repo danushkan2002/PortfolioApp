@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { useInView } from 'react-intersection-observer';
 import { useSelector, useDispatch } from 'react-redux'
-import { useLocation} from 'react-router-dom'
+import { Link, useLocation} from 'react-router-dom'
 import {AiFillGithub, AiOutlineAppstoreAdd, AiOutlineGlobal} from 'react-icons/ai'
 import {HiDatabase} from 'react-icons/hi'
 import heroBG from '../Assets/heroBG.png'
@@ -12,13 +12,16 @@ import { logout } from '../actions/userAction';
 
 
 const HomeScreen = () => {
-  const {pathName} = useLocation()
+  const pathName = useLocation()
   
   const [email, setEmail] = useState('')
   const [textArea, setTextArea] = useState('')
 
   const messageCreateReducer = useSelector(state => state.messageCreateReducer)
   const { message, messageLoading, messageError, messageSuccess } = messageCreateReducer
+
+  const userLogin = useSelector(state => state.userLogin)
+  const { userInfo } = userLogin
 
   const dispatch = useDispatch()
 
@@ -27,6 +30,7 @@ const HomeScreen = () => {
   const { ref:contactRef, inView:isContactVisible } = useInView({triggerOnce:true});
 
   useEffect(() => {
+    setEmail('')
     window.scroll(0,0);
   }, [pathName]);
 
@@ -48,14 +52,17 @@ const HomeScreen = () => {
           backgroundImage:`url(${heroBG})`
         }} >
           <div className='mt-[400px] md:mt-[300px] mb-[50px] relative'>
-            <p className={
+            <div className={
               isHeroVisible ?
               'font-RobotoFlex text-5xl md:text-6xl font-medium text-white duration-1000':
               'font-RobotoFlex text-5xl md:text-6xl font-medium text-white opacity-0 mt-[50px] absolute'
-            }>Hello world,</p>
+            }>
+              <p className=''>Hello world, </p>
+              <span>Welcome to our community</span>
+            </div>
             <p className={
               isHeroVisible?
-              'font-RobotoFlex text-base md:text-lg text-[#383A4F] md:w-[350px] mt-[5px] duration-1000 ':
+              'font-RobotoFlex text-base md:text-lg text-[#9395A0] md:w-[350px] mt-[25px] duration-1000 ':
               'font-RobotoFlex text-base md:text-lg opacity-0 md:w-[350px] mt-[50px] relative'
             }>We creating web application designs and bring them to life using code & develop mobile deigns</p>
             <button className={
@@ -63,7 +70,7 @@ const HomeScreen = () => {
               'w-[225px] h-[60px] bg-10 hover:bg-hover text-white font-RobotoFlex mt-[35px] duration-75':
               'w-[225px] h-[60px] bg-white hover:bg-hover text-white font-RobotoFlex mt-[35px] duration-75 relative'
             }>
-              <p>Creator journey</p>
+              <p>Add Quotation</p>
             </button>
           </div>
           <div className='ml-auto hidden lg:block'>
@@ -201,22 +208,32 @@ const HomeScreen = () => {
                 'w-[100px] h-[5px] bg-10 mt-[10px] scale-x-50'
               } ></div>
               <div className='mt-[25px]'>
-                <input className={
+                <input required={true} className={
                   isContactVisible?
                   'h-[50px] md:h-[75px] w-full md:w-[550px] bg-30 px-[25px] text-white font-RobotoFlex outline-none duration-1000':
                   'h-[50px] md:h-[75px] w-full md:w-[550px] bg-30 px-[25px] text-white font-RobotoFlex outline-none opacity-0'
-                } placeholder='Email' value={email}  onChange={(e) => setEmail(e.target.value)} type={'email'}></input>
+                } placeholder='Email' value={
+                  userInfo ?
+                  userInfo.email :
+                  email
+                }  onChange={(e) => setEmail(e.target.value)} type={'email'}></input>
               </div>
               <div className='mt-[25px]'>
-                <textarea className={
+                <textarea required={true} className={
                   isContactVisible?
                   'h-[100px] md:h-[150px] w-full md:w-[550px] bg-30 pt-[25px] px-[25px] text-white font-RobotoFlex outline-none duration-1000':
                   'h-[100px] md:h-[150px] w-full md:w-[550px] bg-30 pt-[25px] px-[25px] text-white font-RobotoFlex outline-none opacity-0'
                 } placeholder='Message' value={textArea}  onChange={(e) => setTextArea(e.target.value) } type={''}></textarea>
               </div>
-              <button type={'submit'} className='w-[150px] md:w-[225px] h-[50px] md:h-[60px] bg-10 ml-auto font-RobotoFlex mt-[25px] font-semibold text-xs md:text-base hover:bg-opacity-90'>
-                <p>Stay Connected</p>
-              </button>
+              {
+                userInfo ?
+                <button type={'submit'} className='w-[150px] md:w-[225px] h-[50px] md:h-[60px] bg-10 ml-auto font-RobotoFlex mt-[25px] font-semibold text-xs md:text-base hover:bg-opacity-90'>
+                  <p>Stay Connected</p>
+                </button> :
+                <Link to={'/Login'} type={'submit'} className='w-[150px] md:w-[225px] h-[50px] md:h-[60px] bg-10 ml-auto font-RobotoFlex mt-[25px] font-semibold text-xs md:text-base hover:bg-opacity-90 flex items-center justify-center'>
+                  <p>Stay Connected</p>
+                </Link>
+              }
             </div>
             {
               messageLoading ?              
@@ -227,14 +244,14 @@ const HomeScreen = () => {
                 </span>
               </div> :
               messageError ?
-              <div className='w-full h-full bg-60 opacity-75 absolute flex flex-col justify-center items-center'>
+              <div className='w-full h-full bg-60 border-[#EB2728] border-[1px] border-opacity-25 absolute flex flex-col justify-center items-center'>
                 <img src={success} alt='' className='w-[50px] h-[50px]' />
                 <p className='text-white font-RobotoFlex text-lg font-semibold uppercase'>Error</p>
                 <p className='font-RobotoFlex text-white opacity-50 w-[200px] text-center text-sm' >{messageError}</p>
-                <button onClick={messageClearHandler} className='font-RobotoFlex w-[225px] h-[60px] border-[2.5px] border-[#3BB54A] text-[#3BB54A] mt-[25px] text-xs hover:bg-[#3BB54A] hover:text-white duration-200' >Done</button> 
+                <button onClick={messageClearHandler} className='font-RobotoFlex w-[225px] h-[60px] border-[2.5px] border-[#EB2728] text-[#EB2728] mt-[25px] text-xs hover:bg-[#EB2728] hover:text-white duration-200' >Done</button> 
               </div>:
               messageSuccess ?
-              <div className='w-full h-full bg-60 absolute flex flex-col justify-center items-center'>
+              <div className='w-full h-full bg-60 border-[#3BB54A] border-[1px] border-opacity-25 absolute flex flex-col justify-center items-center'>
                 <img src={success} alt='' className='w-[50px] h-[50px]' />
                 <p className='text-white font-RobotoFlex text-lg font-semibold uppercase'>success</p>
                 <p className='font-RobotoFlex text-white opacity-50 w-[200px] text-center text-sm' >Successfully posted you message</p>

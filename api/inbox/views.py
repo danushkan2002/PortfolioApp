@@ -18,12 +18,14 @@ def postMessage(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getMessages(request):
     results = Inbox.objects.all()
     serializer = InboxSerializer(results, many=True)
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getTodayMessages(request):
     today = int(date.today().strftime('%d'))
     message = Inbox.objects.filter(created_at__day=today)
@@ -31,6 +33,7 @@ def getTodayMessages(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getYesterdayMessages(request):
     yesterday = int(date.today().strftime('%d')) - 1
     message = Inbox.objects.filter(created_at__day=yesterday)
@@ -38,6 +41,7 @@ def getYesterdayMessages(request):
     return Response(serializer.data)
 
 @api_view(['GET'])
+@permission_classes([IsAdminUser])
 def getMonthMessages(request):
     month = int(date.today().strftime('%m'))
     message = Inbox.objects.filter(created_at__month=month)
@@ -51,6 +55,7 @@ def getMonthMessages(request):
 #     return Response(serializer.data)
 
 @api_view(['DELETE'])
+@permission_classes([IsAdminUser])
 def deleteMessage(request, pk):
     message = Inbox.objects.get(id=pk)
     message.delete()

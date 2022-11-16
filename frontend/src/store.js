@@ -28,7 +28,7 @@ const inisialState = {
 
 const middlware = [thunk]
 
-const store = configureStore({reducer}, inisialState, 
+const store = configureStore({reducer, preloadedState: inisialState}, 
     composeWithDevTools(applyMiddleware(...middlware)))
 
 export default store
